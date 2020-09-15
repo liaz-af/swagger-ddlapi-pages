@@ -4,7 +4,7 @@ x-id:
 info:
   title: Deferred deep linking API
   version: '1.0'
-host: "myserver.appsflyre.com"
+host: "dls2s.appsflyer.com"
 basePath: '/v1.0'
 paths:
   '/ios/{app_id}':
