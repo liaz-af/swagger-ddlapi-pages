@@ -3,96 +3,27 @@ x-id:
   - reitit.swagger/default
 info:
   title: Deferred deep linking API
-  version: 0.1-beta
+  version: '1.0'
+host: "myserver.appsflyre.com"
+basePath: '/v1.0'
 paths:
-  '/v1.0/ios/{app_id}':
+  '/ios/{app_id}':
     post:
       responses:
         '200':
           schema:
-            type: object
-            properties:
-              found:
-                type: boolean
-              click_event:
-                type: object
-                properties:
-                  af_sub1:
-                    type: string
-                    x-nullable: true
-                  campaign_id:
-                    type: string
-                    x-nullable: true
-                  custom_params:
-                    type: object
-                    properties: {}
-                    title: custom_params
-                  campaign_type:
-                    enum:
-                      - retargeting
-                      - user_acquisition
-                    type: string
-                  timestamp:
-                    type: string
-                    x-nullable: true
-                  match_type:
-                    enum:
-                      - referrer
-                      - id_matching
-                      - srn
-                      - fingerprinting
-                    type: string
-                  af_sub5:
-                    type: string
-                    x-nullable: true
-                  media_source:
-                    type: string
-                    x-nullable: true
-                  campaign:
-                    type: string
-                    x-nullable: true
-                  af_sub4:
-                    type: string
-                    x-nullable: true
-                  click_http_referrer:
-                    type: string
-                    x-nullable: true
-                  af_sub2:
-                    type: string
-                    x-nullable: true
-                  af_sub3:
-                    type: string
-                    x-nullable: true
-                required:
-                  - timestamp
-                  - match_type
-                  - click_http_referrer
-                  - media_source
-                  - campaign
-                  - campaign_id
-                  - campaign_type
-                  - af_sub1
-                  - af_sub2
-                  - af_sub3
-                  - af_sub4
-                  - af_sub5
-                  - custom_params
-                title: click_event
-            required:
-              - found
-              - click_event
-            title: response
-          description: ''
+            $ref: '#/definitions/DLResponse'
+          description: 'Response for Android Deeplink request'     
+        '400':
+          $ref: '#/responses/BadRequest'
+        '503':
+          $ref: '#/responses/ServiceUnavailable' 
+        '504':
+          $ref: '#/responses/GatewayTimeout' 
       produces:
         - application/json
-        - application/transit+msgpack
-        - application/transit+json
-        - application/edn
       consumes:
         - application/json
-        - application/transit+msgpack
-        - application/transit+json
-        - application/edn
       parameters:
         - in: path
           name: app_id
@@ -112,7 +43,6 @@ paths:
         - in: body
           name: sdk_ios_request
           description: ''
-          required: true
           schema:
             type: object
             properties:
@@ -140,7 +70,9 @@ paths:
                 type: boolean
               os:
                 type: string
-              timestamp: {}
+              timestamp:
+                type: string
+                description: 'ISO 8601 UTC format'
               type:
                 type: string
               idfa:
@@ -173,96 +105,25 @@ paths:
               - type
             title: sdk_ios_request
       tags:
-        - ddl
+        - 'iOS Deeplink request'
       summary: Deferred deep link for IOS
-  '/v1.0/android/{app_id}':
+  '/android/{app_id}':
     post:
       responses:
         '200':
           schema:
-            type: object
-            properties:
-              found:
-                type: boolean
-              click_event:
-                type: object
-                properties:
-                  af_sub1:
-                    type: string
-                    x-nullable: true
-                  campaign_id:
-                    type: string
-                    x-nullable: true
-                  custom_params:
-                    type: object
-                    properties: {}
-                    title: custom_params
-                  campaign_type:
-                    enum:
-                      - retargeting
-                      - user_acquisition
-                    type: string
-                  timestamp:
-                    type: string
-                    x-nullable: true
-                  match_type:
-                    enum:
-                      - referrer
-                      - id_matching
-                      - srn
-                      - fingerprinting
-                    type: string
-                  af_sub5:
-                    type: string
-                    x-nullable: true
-                  media_source:
-                    type: string
-                    x-nullable: true
-                  campaign:
-                    type: string
-                    x-nullable: true
-                  af_sub4:
-                    type: string
-                    x-nullable: true
-                  click_http_referrer:
-                    type: string
-                    x-nullable: true
-                  af_sub2:
-                    type: string
-                    x-nullable: true
-                  af_sub3:
-                    type: string
-                    x-nullable: true
-                required:
-                  - timestamp
-                  - match_type
-                  - click_http_referrer
-                  - media_source
-                  - campaign
-                  - campaign_id
-                  - campaign_type
-                  - af_sub1
-                  - af_sub2
-                  - af_sub3
-                  - af_sub4
-                  - af_sub5
-                  - custom_params
-                title: click_event
-            required:
-              - found
-              - click_event
-            title: response
-          description: ''
+            $ref: '#/definitions/DLResponse'
+          description: 'Response for Android Deeplink request'     
+        '400':
+          $ref: '#/responses/BadRequest'
+        '503':
+          $ref: '#/responses/ServiceUnavailable' 
+        '504':
+          $ref: '#/responses/GatewayTimeout'
       produces:
         - application/json
-        - application/transit+msgpack
-        - application/transit+json
-        - application/edn
       consumes:
         - application/json
-        - application/transit+msgpack
-        - application/transit+json
-        - application/edn
       parameters:
         - in: path
           name: app_id
@@ -305,7 +166,9 @@ paths:
                 type: boolean
               os:
                 type: string
-              timestamp: {}
+              timestamp:
+                type: string
+                description: 'ISO 8601 UTC format'
               oaid:
                 type: object
                 properties:
@@ -353,5 +216,87 @@ paths:
               - type
             title: sdk_android_request
       tags:
-        - ddl
+        - 'Android Deeplink request'
       summary: Deferred deep link for Android
+responses:
+  'BadRequest':
+    description: 'Bad Request. The request message is not valid.'
+  'ServiceUnavailable':
+    description: 'Service Unavailable. ELB (Amazon Load-balancer) service unavailable.'
+  'GatewayTimeout':
+    description: 'Gateway Timeout. ELB (Amazon Load-balancer) service unavailable.' 
+
+definitions:
+  DLResponse:
+    type: object
+    properties:
+      found:
+        type: boolean
+      click_event:
+        type: object
+        properties:
+          af_sub1:
+            type: string
+            x-nullable: true
+          campaign_id:
+            type: string
+            x-nullable: true
+          custom_params:
+            type: object
+            properties: {}
+            title: custom_params
+          campaign_type:
+            enum:
+              - retargeting
+              - user_acquisition
+            type: string
+          timestamp:
+            type: string
+            x-nullable: true
+          match_type:
+            enum:
+              - referrer
+              - id_matching
+              - srn
+              - fingerprinting
+            type: string
+          af_sub5:
+            type: string
+            x-nullable: true
+          media_source:
+            type: string
+            x-nullable: true
+          campaign:
+            type: string
+            x-nullable: true
+          af_sub4:
+            type: string
+            x-nullable: true
+          click_http_referrer:
+            type: string
+            x-nullable: true
+          af_sub2:
+            type: string
+            x-nullable: true
+          af_sub3:
+            type: string
+            x-nullable: true
+        required:
+          - timestamp
+          - match_type
+          - click_http_referrer
+          - media_source
+          - campaign
+          - campaign_id
+          - campaign_type
+          - af_sub1
+          - af_sub2
+          - af_sub3
+          - af_sub4
+          - af_sub5
+          - custom_params
+        title: click_event
+    required:
+      - found
+      - click_event
+    title: shared response
