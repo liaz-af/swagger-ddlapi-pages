@@ -1,0 +1,291 @@
+openapi: 3.0.1
+info:
+  title: Deferred deep linking API
+  version: "1.0"
+servers:
+- url: //dls2s.appsflyer.com/v1.0
+paths:
+  /ios/{app_id}:
+    post:
+      tags:
+      - iOS Deeplink request
+      summary: Deferred deep link for IOS
+      parameters:
+      - name: app_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: af_sig
+        in: query
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: ios_request
+              required:
+              - is_first
+              - lang
+              - os
+              - timestamp
+              - type
+              type: object
+              properties:
+                idfv:
+                  title: idfv
+                  required:
+                  - type
+                  - value
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                      - unhashed
+                      - sha1
+                      - md5
+                    value:
+                      type: string
+                lang:
+                  type: string
+                att_status:
+                  type: integer
+                  format: int64
+                is_first:
+                  type: boolean
+                os:
+                  type: string
+                timestamp:
+                  type: string
+                  description: ISO 8601 UTC format
+                type:
+                  type: string
+                idfa:
+                  title: idfa
+                  required:
+                  - type
+                  - value
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                      - unhashed
+                      - sha1
+                      - md5
+                    value:
+                      type: string
+                sharing_filter:
+                  type: string
+                  x-anyOf:
+                  - type: string
+                  - x-allOf:
+                    - {}
+                    - type: array
+        required: false
+      responses:
+        200:
+          description: Response for Android Deeplink request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DLResponse'
+        400:
+          description: Bad Request. The request message is not valid.
+          content: {}
+        503:
+          description: Service Unavailable. ELB (Amazon Load-balancer) service unavailable.
+          content: {}
+        504:
+          description: Gateway Timeout. ELB (Amazon Load-balancer) service unavailable.
+          content: {}
+      x-codegen-request-body-name: ios_request
+  /android/{app_id}:
+    post:
+      tags:
+      - Android Deeplink request
+      summary: Deferred deep link for Android
+      parameters:
+      - name: app_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: af_sig
+        in: query
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: android_request
+              required:
+              - is_first
+              - lang
+              - os
+              - timestamp
+              - type
+              type: object
+              properties:
+                referrers:
+                  type: array
+                  items:
+                    title: referrer
+                    required:
+                    - source
+                    - value
+                    type: object
+                    properties:
+                      source:
+                        type: string
+                      value:
+                        type: string
+                lang:
+                  type: string
+                is_first:
+                  type: boolean
+                os:
+                  type: string
+                timestamp:
+                  type: string
+                  description: ISO 8601 UTC format
+                oaid:
+                  title: request-spec/oaid
+                  $ref: '#/components/schemas/CommonIdObject'
+                type:
+                  type: string
+                gaid:
+                  title: request-spec/gaid
+                  $ref: '#/components/schemas/CommonIdObject'
+                sharing_filter:
+                  type: string
+                  x-anyOf:
+                  - type: string
+                  - x-allOf:
+                    - {}
+                    - type: array
+        required: true
+      responses:
+        200:
+          description: Response for Android Deeplink request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DLResponse'
+        400:
+          description: Bad Request. The request message is not valid.
+          content: {}
+        503:
+          description: Service Unavailable. ELB (Amazon Load-balancer) service unavailable.
+          content: {}
+        504:
+          description: Gateway Timeout. ELB (Amazon Load-balancer) service unavailable.
+          content: {}
+      x-codegen-request-body-name: android_request
+components:
+  schemas:
+    CommonIdObject:
+      title: Common Id structure
+      required:
+        - type
+        - value
+      properties:
+        type:
+          type: string
+          enum:
+          - unhashed
+          - sha1
+          - md5
+        value:
+          type: string
+
+    DLResponse:
+      title: shared response
+      required:
+      - click_event
+      - found
+      type: object
+      properties:
+        found:
+          type: boolean
+        click_event:
+          title: click_event
+          required:
+          - af_sub1
+          - af_sub2
+          - af_sub3
+          - af_sub4
+          - af_sub5
+          - campaign
+          - campaign_id
+          - campaign_type
+          - click_http_referrer
+          - custom_params
+          - match_type
+          - media_source
+          - timestamp
+          type: object
+          properties:
+            campaign_id:
+              type: string
+              nullable: true
+            custom_params:
+              title: custom_params
+              type: object
+              properties: {}
+            campaign_type:
+              type: string
+              enum:
+              - retargeting
+              - user_acquisition
+            timestamp:
+              type: string
+              nullable: true
+            match_type:
+              type: string
+              enum:
+              - referrer
+              - id_matching
+              - srn
+              - fingerprinting
+            media_source:
+              type: string
+              nullable: true
+            campaign:
+              type: string
+              nullable: true
+            click_http_referrer:
+              type: string
+              nullable: true
+            af_sub1:
+              type: string
+              nullable: true
+            af_sub2:
+              type: string
+              nullable: true
+            af_sub3:
+              type: string
+              nullable: true
+            af_sub4:
+              type: string
+              nullable: true
+            af_sub5:
+              type: string
+              nullable: true
+  responses:
+    BadRequest:
+      description: Bad Request. The request message is not valid.
+      content: {}
+    GatewayTimeout:
+      description: Gateway Timeout. ELB (Amazon Load-balancer) service unavailable.
+      content: {}
+    ServiceUnavailable:
+      description: Service Unavailable. ELB (Amazon Load-balancer) service unavailable.
+      content: {}
+x-id:
+- reitit.swagger/default
