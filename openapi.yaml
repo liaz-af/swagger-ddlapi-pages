@@ -81,11 +81,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/DLResponse'
               examples:
-                Link not found:
+                Link_not_found:
                   value:
                     found: false
                     click_event: {}
-                Link found:
+                Link_found:
                   value:
                     found: true
                     click_event: {
@@ -184,11 +184,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/DLResponse'
               examples:
-                Link not found:
+                Link_not_found:
                   value:
                     found: false
                     click_event: {}
-                Link found:
+                Link_found:
                   value:
                     found: true
                     click_event: {
