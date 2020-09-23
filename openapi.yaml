@@ -36,24 +36,21 @@ paths:
               properties:
                 idfv:
                   title: idfv
-                  required:
-                  - type
-                  - value
-                  type: object
-                  properties:
-                    type:
-                      type: string
-                      enum:
-                      - unhashed
-                      - sha1
-                      - md5
-                    value:
-                      type: string
+                  $ref: '#/components/schemas/CommonIdObject'
                 lang:
                   type: string
                 att_status:
                   type: integer
-                  format: int64
+                  enum:
+                    - authorized
+                    - denied
+                    - notDetermined 
+                    - restricted 
+                  description: >
+                    `authorized` - TODO - add info 
+                    `denied` - TODO - add info
+                    `notDetermined` - TODO - add info 
+                    `restricted` - TODO - add info
                 is_first:
                   type: boolean
                 os:
@@ -65,19 +62,7 @@ paths:
                   type: string
                 idfa:
                   title: idfa
-                  required:
-                  - type
-                  - value
-                  type: object
-                  properties:
-                    type:
-                      type: string
-                      enum:
-                      - unhashed
-                      - sha1
-                      - md5
-                    value:
-                      type: string
+                  $ref: '#/components/schemas/CommonIdObject'
                 sharing_filter:
                   type: string
                   x-anyOf:
@@ -94,14 +79,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/DLResponse'
         400:
-          description: Bad Request. The request message is not valid.
-          content: {}
+          $ref: '#/responses/BadRequest'
         503:
-          description: Service Unavailable. ELB (Amazon Load-balancer) service unavailable.
-          content: {}
+          $ref: '#/responses/GatewayTimeout'
         504:
-          description: Gateway Timeout. ELB (Amazon Load-balancer) service unavailable.
-          content: {}
+          $ref: '#/responses/ServiceUnavailable'
       x-codegen-request-body-name: ios_request
   /android/{app_id}:
     post:
@@ -178,15 +160,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/DLResponse'
         400:
-          description: Bad Request. The request message is not valid.
-          content: {}
+          $ref: '#/responses/BadRequest'
         503:
-          description: Service Unavailable. ELB (Amazon Load-balancer) service unavailable.
-          content: {}
+          $ref: '#/responses/GatewayTimeout'
         504:
-          description: Gateway Timeout. ELB (Amazon Load-balancer) service unavailable.
-          content: {}
+          $ref: '#/responses/ServiceUnavailable'
       x-codegen-request-body-name: android_request
+      
 components:
   schemas:
     CommonIdObject:
@@ -287,5 +267,3 @@ components:
     ServiceUnavailable:
       description: Service Unavailable. ELB (Amazon Load-balancer) service unavailable.
       content: {}
-x-id:
-- reitit.swagger/default
