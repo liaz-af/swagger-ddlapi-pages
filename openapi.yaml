@@ -70,21 +70,45 @@ paths:
                   - x-allOf:
                     - {}
                     - type: array
+            
         required: false
+        
       responses:
         200:
-          description: Response for Android Deeplink request
+          description: Response for iOS Deeplink request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DLResponse'
+              examples:
+                Link not found:
+                  value:
+                    found: false
+                    click_event: {}
+                Link found:
+                  value:
+                    found: true
+                    click_event: {
+                      timestamp: "2020-04-22T08:45:33.412",
+                      is_first: true,
+                      open_referrer: "null",
+                      ip: "216.58.212.142",
+                      lang: "en-US",
+                      os: "7.1.2",
+                      type: "iPhone",
+                      idfa: {"value":"F55AF6436CDFAC250CBEAF3BFFCD713E3F4D1BDF", "type":"sha1"},
+                      idfv: {"value":"AC9FB4FB-AAAA-BBBB-88E6-2840D9BB17F4", "type":"unhashed"},
+                      sharing_filter: ["googleadwords_int", "adcolony_int"],
+                      att_status: "3"
+                    }
         400:
-          $ref: '#/responses/BadRequest'
+          $ref: '#/components/responses/BadRequest'
         503:
-          $ref: '#/responses/GatewayTimeout'
+          $ref: '#/components/responses/GatewayTimeout'
         504:
-          $ref: '#/responses/ServiceUnavailable'
+          $ref: '#/components/responses/ServiceUnavailable'
       x-codegen-request-body-name: ios_request
+  
   /android/{app_id}:
     post:
       tags:
@@ -159,14 +183,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DLResponse'
+              examples:
+                Link not found:
+                  value:
+                    found: false
+                    click_event: {}
+                Link found:
+                  value:
+                    found: true
+                    click_event: {
+                      timestamp: "2020-04-22T08:45:33.412",
+                      is_first: true,
+                      ip: "216.58.212.142",
+                      lang: "en-US",
+                      os: "6.0",
+                      type: "SM-G955A",
+                      gaid: {"value":"F55AF6436CDFAC250CBEAF3BFFCD713E3F4D1BDF", "type":"sha1"},
+                      oaid: {"value":"AC9FB4FB-AAAA-BBBB-88E6-2840D9BB17F4", "type":"unhashed"},
+                      referrers: [
+                        {
+                          source: "google",         
+                          value: "tran_id=44577766555&pid=adcolony_int"
+                        }       
+                      ],
+                      sharing_filter: ["googleadwords_int", "adcolony_int"]
+                    }
         400:
-          $ref: '#/responses/BadRequest'
+          $ref: '#/components/responses/BadRequest'
         503:
-          $ref: '#/responses/GatewayTimeout'
+          $ref: '#/components/responses/GatewayTimeout'
         504:
-          $ref: '#/responses/ServiceUnavailable'
+          $ref: '#/components/responses/ServiceUnavailable'
       x-codegen-request-body-name: android_request
-      
+
 components:
   schemas:
     CommonIdObject:
