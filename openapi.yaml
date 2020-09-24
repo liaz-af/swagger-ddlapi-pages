@@ -41,16 +41,17 @@ paths:
                   type: string
                 att_status:
                   type: integer
+                  format: int32
                   enum:
-                    - authorized
-                    - denied
-                    - notDetermined 
-                    - restricted 
+                    - 1
+                    - 2
+                    - 3
+                    - 4 
                   description: >
-                    `authorized` - TODO - add info 
-                    `denied` - TODO - add info
-                    `notDetermined` - TODO - add info 
-                    `restricted` - TODO - add info
+                    - 1 = authorized
+                    - 2 = denied
+                    - 3 = notDetermined 
+                    - 4 = restricted 
                 is_first:
                   type: boolean
                 os:
@@ -81,11 +82,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/DLResponse'
               examples:
-                Link_not_found:
+                Click_not_found:
                   value:
                     found: false
                     click_event: {}
-                Link_found:
+                Click_found:
                   value:
                     found: true
                     click_event: {
@@ -184,11 +185,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/DLResponse'
               examples:
-                Link_not_found:
+                Click_not_found:
                   value:
                     found: false
                     click_event: {}
-                Link_found:
+                Click_found:
                   value:
                     found: true
                     click_event: {
