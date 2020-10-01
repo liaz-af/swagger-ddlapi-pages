@@ -16,11 +16,29 @@ paths:
         required: true
         schema:
           type: string
+        description: "This is the App ID of the app for which you are passing data"
+        example: id123456789
       - name: af_sig
         in: query
         required: true
         schema:
           type: string
+        description: |
+          Create an HMAC signature by concatenating the values of the following fields:
+
+          `timestamp` + `ip`
+
+          The HMAC is generated using SHA256 and uses the DevKey as the signature’s secret key. 
+          The account DevKey is taken from the App Settings page in the AppsFlyer dashboard.
+          
+          For example, the concatenation of the Timestamp and IP are: 
+          > `2015-01-22T08:45:33.412127.0.0.1`
+
+          The DevKey is `w8sZzy8EaPaxFKfaoTqUi6` 
+          
+          *Please notice to place the timestamp first and then the IP*
+        example: "TODO - ADD EXAMPLE"
+
       requestBody:
         content:
           application/json:
@@ -39,6 +57,8 @@ paths:
                   $ref: '#/components/schemas/CommonIdObject'
                 lang:
                   type: string
+                  description: "Device Locale Used for Authentication & Probabilistic Modeling"
+                  example: "en-US"
                 att_status:
                   type: integer
                   format: int32
@@ -47,20 +67,29 @@ paths:
                     - 2
                     - 3
                     - 4 
-                  description: >
-                    - 1 = authorized
-                    - 2 = denied
-                    - 3 = notDetermined 
-                    - 4 = restricted 
+                  description: |
+                    App Tracking Transparency - Use this flag to indicate if user opted out the use of idfa (relevant for iOS 14 and above)
+                    - 1 = authorized,
+                    - 2 = denied,
+                    - 3 = notDetermined, 
+                    - 4 = restricted
+                  example: 1
                 is_first:
                   type: boolean
+                  description: "Is first app launch"
+                  example: true
                 os:
                   type: string
+                  description: "Device OS Version Used for Authentication & Probabilistic Modeling"
+                  example: "10.3.3"
                 timestamp:
                   type: string
                   description: ISO 8601 UTC format
+                  example: "2015-01-22T08:45:33.412"
                 type:
                   type: string
+                  description: "Device Type/Model Used for Authentication & Probabilistic Modeling"
+                  example: "iPhone"
                 idfa:
                   title: idfa
                   $ref: '#/components/schemas/CommonIdObject'
@@ -71,6 +100,8 @@ paths:
                   - x-allOf:
                     - {}
                     - type: array
+                  example: ["googleadwords_int", "adcolony_int"]
+
             
         required: false
         
@@ -121,11 +152,29 @@ paths:
         required: true
         schema:
           type: string
+        description: "This is the App ID of the app for which you are passing data"
+        example: com.example.myapp
       - name: af_sig
         in: query
         required: true
         schema:
           type: string
+        description: |
+          Create an HMAC signature by concatenating the values of the following fields:
+
+          `timestamp` + `ip`
+
+          The HMAC is generated using SHA256 and uses the DevKey as the signature’s secret key. 
+          The account DevKey is taken from the App Settings page in the AppsFlyer dashboard.
+          
+          For example, the concatenation of the Timestamp and IP are: 
+          > `2015-01-22T08:45:33.412127.0.0.1`
+
+          The DevKey is `w8sZzy8EaPaxFKfaoTqUi6` 
+          
+          *Please notice to place the timestamp first and then the IP*
+        example: "TODO - ADD EXAMPLE"
+
       requestBody:
         content:
           application/json:
@@ -152,20 +201,47 @@ paths:
                         type: string
                       value:
                         type: string
+                  description: |
+                    The list referrer strings from app stores such as Google Play or Huawei App Gallery.
+
+                    The field structure is a vector of **source** and **value** parameters per store.
+
+                    The current supported stores are **google** and **huawei**.
+                    
+                    > Note: **google** and **huawei** are predefined values. The service ignores non-valid store names.
+                  example: 
+                    [ 
+                      { "source": "google",         
+                        "value": "tran_id= 44577766555&pid=adcolony_int"
+                      },
+                      {
+                        "source": "huawei",
+                        "value": null,
+                      }       
+                    ]
                 lang:
                   type: string
+                  description: "Device Locale Used for Authentication & Probabilistic Modeling"
+                  example: "en-US"
                 is_first:
                   type: boolean
+                  description: "Is first app launch"
+                  example: true
                 os:
                   type: string
+                  description: "Device OS Version Used for Authentication & Probabilistic Modeling"
+                  example: "10.3.3"
                 timestamp:
                   type: string
                   description: ISO 8601 UTC format
+                  example: "2015-01-22T08:45:33.412"
                 oaid:
                   title: request-spec/oaid
                   $ref: '#/components/schemas/CommonIdObject'
                 type:
                   type: string
+                  description: "Device Type/Model Used for Authentication & Probabilistic Modeling"
+                  example: "iPhone"
                 gaid:
                   title: request-spec/gaid
                   $ref: '#/components/schemas/CommonIdObject'
@@ -176,6 +252,13 @@ paths:
                   - x-allOf:
                     - {}
                     - type: array
+                  description: |
+                    The value options are the following:
+                    - `all` - Don’t send the event to any partner
+                    - [`"a"`,`"b"`,`"c"`] - Don’t send the event to this list of partners (by partner IDs)
+                    *Notes: The partner ids must be taken from predefined*
+                  example: ["googleadwords_int", "adcolony_int"]
+
         required: true
       responses:
         200:
@@ -231,8 +314,10 @@ components:
           - unhashed
           - sha1
           - md5
+          example: "F55AF6436CDFAC250CBEAF3BFFCD713E3F4D1BDF"
         value:
           type: string
+          example: sha1
 
     DLResponse:
       title: shared response
