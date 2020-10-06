@@ -37,7 +37,7 @@ paths:
           The DevKey is `w8sZzy8EaPaxFKfaoTqUi6` 
           
           *Please notice to place the timestamp first and then the IP*
-        example: "TODO - ADD EXAMPLE"
+        example: "ce2d1e6b4619b9e19bc6be116183b92e43aa01e182b15012a7215bdd879ec327"
 
       requestBody:
         content:
@@ -78,6 +78,14 @@ paths:
                   type: boolean
                   description: "Is first app launch"
                   example: true
+                open_referrer:
+                  type: string
+                  description: "From which app the current app was opened"
+                  example: "com.BhartiMobile.myairtel"
+                ip:
+                  type: string
+                  description: "The Device’s IP Address - IPv4"
+                  example: "123.3.12.255"
                 os:
                   type: string
                   description: "Device OS Version Used for Authentication & Probabilistic Modeling"
@@ -227,6 +235,10 @@ paths:
                   type: boolean
                   description: "Is first app launch"
                   example: true
+                ip:
+                  type: string
+                  description: "The Device’s IP Address - IPv4"
+                  example: "123.3.12.255"
                 os:
                   type: string
                   description: "Device OS Version Used for Authentication & Probabilistic Modeling"
