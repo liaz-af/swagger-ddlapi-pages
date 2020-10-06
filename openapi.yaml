@@ -3,7 +3,7 @@ info:
   title: Deferred deep linking API
   version: "1.0"
 servers:
-- url: //dls2s.appsflyer.com/v1.0
+- url: https://dls2s.appsflyer.com/v1.0
 paths:
   /ios/{app_id}:
     post:
@@ -181,7 +181,7 @@ paths:
           The DevKey is `w8sZzy8EaPaxFKfaoTqUi6` 
           
           *Please notice to place the timestamp first and then the IP*
-        example: "TODO - ADD EXAMPLE"
+        example: "ce2d1e6b4619b9e19bc6be116183b92e43aa01e182b15012a7215bdd879ec327"
 
       requestBody:
         content:
@@ -313,6 +313,23 @@ paths:
       x-codegen-request-body-name: android_request
 
 components:
+  responses:
+    BadRequest:
+      description: Bad Request. The request message is not valid.
+      content:
+        application/json:
+            schema:
+              $ref: '#/components/schemas/Error' 
+            example: {
+              message: "Bad Request"
+            }
+    GatewayTimeout:
+      description: Gateway Timeout. ELB (Amazon Load-balancer) service unavailable.
+      content: {}
+    ServiceUnavailable:
+      description: Service Unavailable. ELB (Amazon Load-balancer) service unavailable.
+      content: {}
+
   schemas:
     CommonIdObject:
       title: Common Id structure
@@ -404,13 +421,16 @@ components:
             af_sub5:
               type: string
               nullable: true
-  responses:
-    BadRequest:
-      description: Bad Request. The request message is not valid.
-      content: {}
-    GatewayTimeout:
-      description: Gateway Timeout. ELB (Amazon Load-balancer) service unavailable.
-      content: {}
-    ServiceUnavailable:
-      description: Service Unavailable. ELB (Amazon Load-balancer) service unavailable.
-      content: {}
+      
+    # Schema for error response body
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+  
