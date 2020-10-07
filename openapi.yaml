@@ -50,6 +50,7 @@ paths:
               - os
               - timestamp
               - type
+              - ip
               type: object
               properties:
                 idfv:
@@ -194,6 +195,7 @@ paths:
               - os
               - timestamp
               - type
+              - ip
               type: object
               properties:
                 referrers:
