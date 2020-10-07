@@ -343,10 +343,10 @@ components:
           - unhashed
           - sha1
           - md5
-          example: "F55AF6436CDFAC250CBEAF3BFFCD713E3F4D1BDF"
+          example: sha1
         value:
           type: string
-          example: sha1
+          example: "F55AF6436CDFAC250CBEAF3BFFCD713E3F4D1BDF"
 
     DLResponse:
       title: shared response
