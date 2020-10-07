@@ -334,7 +334,6 @@ components:
 
   schemas:
     CommonIdObject:
-      title: Common Id structure
       required:
         - type
         - value
