@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: Deferred deep linking API
+  title:  Deep linking REST API
   version: "1.0"
 servers:
 - url: https://dls2s.appsflyer.com/v1.0
@@ -8,15 +8,15 @@ paths:
   /ios/{app_id}:
     post:
       tags:
-      - iOS Deeplink request
-      summary: Deferred deep link for IOS
+      - iOS deep linking request
+      summary: Deep linking for IOS
       parameters:
       - name: app_id
         in: path
         required: true
         schema:
           type: string
-        description: "This is the App ID of the app for which you are passing data"
+        description: "App ID of the app for which you are passing data"
         example: id123456789
       - name: af_sig
         in: query
@@ -29,14 +29,15 @@ paths:
           `timestamp` + `ip`
 
           The HMAC is generated using SHA256 and uses the DevKey as the signature’s secret key. 
-          The account DevKey is taken from the App Settings page in the AppsFlyer dashboard.
+          To retrieve the DevKey, in the AppsFlyer dashboard, go ***Configuration*** > ***App Settings***.
+
           
-          For example, the concatenation of the Timestamp and IP are: 
+          For example, the concatenation of the timestamp and IP are: 
           > `2015-01-22T08:45:33.412127.0.0.1`
 
           The DevKey is `w8sZzy8EaPaxFKfaoTqUi6` 
           
-          *Please notice to place the timestamp first and then the IP*
+          **Note**: Make sure you put the timestamp first, and then the IP.
         example: "ce2d1e6b4619b9e19bc6be116183b92e43aa01e182b15012a7215bdd879ec327"
 
       requestBody:
@@ -58,7 +59,7 @@ paths:
                   $ref: '#/components/schemas/CommonIdObject'
                 lang:
                   type: string
-                  description: "Device Locale Used for Authentication & Probabilistic Modeling"
+                  description: "Device locale used for authentication and probabilistic modeling"
                   example: "en-US"
                 att_status:
                   type: integer
@@ -69,10 +70,10 @@ paths:
                     - 3
                     - 4 
                   description: |
-                    App Tracking Transparency - Use this flag to indicate if user opted out the use of idfa (relevant for iOS 14 and above)
-                    - 1 = authorized,
-                    - 2 = denied,
-                    - 3 = notDetermined, 
+                    App Tracking Transparency: Use this flag to indicate if user opts out of the use of IDFA (relevant for iOS 14 and above)
+                    - 1 = authorized
+                    - 2 = denied
+                    - 3 = notDetermined 
                     - 4 = restricted
                   example: 1
                 is_first:
@@ -81,15 +82,15 @@ paths:
                   example: true
                 open_referrer:
                   type: string
-                  description: "From which app the current app was opened"
+                  description: "App from which the current app was opened"
                   example: "com.BhartiMobile.myairtel"
                 ip:
                   type: string
-                  description: "The Device’s IP Address - IPv4"
+                  description: "The device IP Address - IPv4"
                   example: "123.3.12.255"
                 os:
                   type: string
-                  description: "Device OS Version Used for Authentication & Probabilistic Modeling"
+                  description: "Device OS version used for authentication and probabilistic modeling"
                   example: "10.3.3"
                 timestamp:
                   type: string
@@ -97,7 +98,7 @@ paths:
                   example: "2015-01-22T08:45:33.412"
                 type:
                   type: string
-                  description: "Device Type/Model Used for Authentication & Probabilistic Modeling"
+                  description: "Device type/model used for authentication and probabilistic modeling"
                   example: "iPhone"
                 idfa:
                   title: idfa
@@ -116,32 +117,16 @@ paths:
         
       responses:
         200:
-          description: Response for iOS Deeplink request
+          description: Response for iOS deep linking request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DLResponse'
               examples:
                 Click_not_found:
-                  value:
-                    found: false
-                    click_event: {}
+                  $ref: '#/components/examples/ClickNotFound'
                 Click_found:
-                  value:
-                    found: true
-                    click_event: {
-                      timestamp: "2020-04-22T08:45:33.412",
-                      is_first: true,
-                      open_referrer: "null",
-                      ip: "216.58.212.142",
-                      lang: "en-US",
-                      os: "7.1.2",
-                      type: "iPhone",
-                      idfa: {"value":"F55AF6436CDFAC250CBEAF3BFFCD713E3F4D1BDF", "type":"sha1"},
-                      idfv: {"value":"AC9FB4FB-AAAA-BBBB-88E6-2840D9BB17F4", "type":"unhashed"},
-                      sharing_filter: ["googleadwords_int", "adcolony_int"],
-                      att_status: "3"
-                    }
+                  $ref: '#/components/examples/ClickFound'
         400:
           $ref: '#/components/responses/BadRequest'
         503:
@@ -153,15 +138,15 @@ paths:
   /android/{app_id}:
     post:
       tags:
-      - Android Deeplink request
-      summary: Deferred deep link for Android
+      - Android deep linking request
+      summary: Deep linking for Android
       parameters:
       - name: app_id
         in: path
         required: true
         schema:
           type: string
-        description: "This is the App ID of the app for which you are passing data"
+        description: "App ID of the app for which you are passing data"
         example: com.example.myapp
       - name: af_sig
         in: query
@@ -174,14 +159,14 @@ paths:
           `timestamp` + `ip`
 
           The HMAC is generated using SHA256 and uses the DevKey as the signature’s secret key. 
-          The account DevKey is taken from the App Settings page in the AppsFlyer dashboard.
+          To retrieve the DevKey, in the AppsFlyer dashboard, go ***Configuration*** > ***App Settings***.
           
-          For example, the concatenation of the Timestamp and IP are: 
+          For example, the concatenation of the timestamp and IP are: 
           > `2015-01-22T08:45:33.412127.0.0.1`
 
           The DevKey is `w8sZzy8EaPaxFKfaoTqUi6` 
           
-          *Please notice to place the timestamp first and then the IP*
+          **Note**: Make sure you put the timestamp first, and then the IP.
         example: "ce2d1e6b4619b9e19bc6be116183b92e43aa01e182b15012a7215bdd879ec327"
 
       requestBody:
@@ -212,13 +197,13 @@ paths:
                       value:
                         type: string
                   description: |
-                    The list referrer strings from app stores such as Google Play or Huawei App Gallery.
+                    The list referrer strings from app stores (for example, Google Play or Huawei App Gallery).
 
                     The field structure is a vector of **source** and **value** parameters per store.
 
                     The current supported stores are **google** and **huawei**.
                     
-                    > Note: **google** and **huawei** are predefined values. The service ignores non-valid store names.
+                    > **Note**: **google** and **huawei** are predefined values. The service ignores non-valid store names.
                   example: 
                     [ 
                       { "source": "google",         
@@ -231,7 +216,7 @@ paths:
                     ]
                 lang:
                   type: string
-                  description: "Device Locale Used for Authentication & Probabilistic Modeling"
+                  description: "Device locale Used for authentication and probabilistic modeling"
                   example: "en-US"
                 is_first:
                   type: boolean
@@ -239,11 +224,11 @@ paths:
                   example: true
                 ip:
                   type: string
-                  description: "The Device’s IP Address - IPv4"
+                  description: "The device IP Address - IPv4"
                   example: "123.3.12.255"
                 os:
                   type: string
-                  description: "Device OS Version Used for Authentication & Probabilistic Modeling"
+                  description: "Device OS version used for authentication and probabilistic modeling"
                   example: "10.3.3"
                 timestamp:
                   type: string
@@ -254,7 +239,7 @@ paths:
                   $ref: '#/components/schemas/CommonIdObject'
                 type:
                   type: string
-                  description: "Device Type/Model Used for Authentication & Probabilistic Modeling"
+                  description: "Device type/model used for authentication and probabilistic modeling"
                   example: "iPhone"
                 gaid:
                   title: request-spec/gaid
@@ -268,44 +253,24 @@ paths:
                     - type: array
                   description: |
                     The value options are the following:
-                    - `all` - Don’t send the event to any partner
-                    - [`"a"`,`"b"`,`"c"`] - Don’t send the event to this list of partners (by partner IDs)
-                    *Notes: The partner ids must be taken from predefined*
+                    - `all`: Doesn’t send the event to any partner
+                    - [`"a"`,`"b"`,`"c"`]: Doesn’t send the event to the specified list of partners (by partner IDs)
+                    **Note**: The partner IDs must be taken from predefined.
                   example: ["googleadwords_int", "adcolony_int"]
 
         required: true
       responses:
         200:
-          description: Response for Android Deeplink request
+          description: Response for Android deep linking request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DLResponse'
               examples:
                 Click_not_found:
-                  value:
-                    found: false
-                    click_event: {}
+                  $ref: '#/components/examples/ClickNotFound'
                 Click_found:
-                  value:
-                    found: true
-                    click_event: {
-                      timestamp: "2020-04-22T08:45:33.412",
-                      is_first: true,
-                      ip: "216.58.212.142",
-                      lang: "en-US",
-                      os: "6.0",
-                      type: "SM-G955A",
-                      gaid: {"value":"F55AF6436CDFAC250CBEAF3BFFCD713E3F4D1BDF", "type":"sha1"},
-                      oaid: {"value":"AC9FB4FB-AAAA-BBBB-88E6-2840D9BB17F4", "type":"unhashed"},
-                      referrers: [
-                        {
-                          source: "google",         
-                          value: "tran_id=44577766555&pid=adcolony_int"
-                        }       
-                      ],
-                      sharing_filter: ["googleadwords_int", "adcolony_int"]
-                    }
+                  $ref: '#/components/examples/ClickFound'
         400:
           $ref: '#/components/responses/BadRequest'
         503:
@@ -315,7 +280,33 @@ paths:
       x-codegen-request-body-name: android_request
 
 components:
-  responses:
+  examples:
+    ClickNotFound:
+      value:
+        found: false
+        click_event: {}
+    ClickFound:
+      value:
+        found: true
+        click_event: {
+          timestamp: "2020-04-22T08:45:33.412",
+          custom_params: {
+            fruit_name: "apples",
+            fruit_amount: "26"
+          },
+          campaign_id: "394a89cf-275a-451b-b030-1c6f8b55ff19",
+          match_type: "probabilistic",
+          media_source: "Email",
+          campaign: "my_new_campaign",
+          click_http_referrer: "https://www.ynet.co.il/",
+          af_sub1: "my_afsub1",
+          af_sub2: "my_afsub2",
+          af_sub3: "my_afsub3",
+          af_sub4: "my_afsub4",
+          af_sub5: "my_afsub5",
+        }
+    
+  responses:  
     BadRequest:
       description: Bad Request. The request message is not valid.
       content:
@@ -368,7 +359,6 @@ components:
           - af_sub5
           - campaign
           - campaign_id
-          - campaign_type
           - click_http_referrer
           - custom_params
           - match_type
@@ -383,11 +373,6 @@ components:
               title: custom_params
               type: object
               properties: {}
-            campaign_type:
-              type: string
-              enum:
-              - retargeting
-              - user_acquisition
             timestamp:
               type: string
               nullable: true
