@@ -111,7 +111,6 @@ paths:
                     - {}
                     - type: array
                   example: ["googleadwords_int", "adcolony_int"]
-
             
         required: false
         
@@ -124,9 +123,29 @@ paths:
                 $ref: '#/components/schemas/DLResponse'
               examples:
                 Click_not_found:
-                  $ref: '#/components/examples/ClickNotFound'
+                  value:
+                    found: false
+                    click_event: {}
                 Click_found:
-                  $ref: '#/components/examples/ClickFound'
+                  value:
+                    found: true
+                    click_event: {
+                      timestamp: "2020-04-22T08:45:33.412",
+                      custom_params: {
+                        fruit_name: "apples",
+                        fruit_amount: "26"
+                      },
+                      campaign_id: "394a89cf-275a-451b-b030-1c6f8b55ff19",
+                      match_type: "probabilistic",
+                      media_source: "Email",
+                      campaign: "my_new_campaign",
+                      click_http_referrer: "https://www.ynet.co.il/",
+                      af_sub1: "my_afsub1",
+                      af_sub2: "my_afsub2",
+                      af_sub3: "my_afsub3",
+                      af_sub4: "my_afsub4",
+                      af_sub5: "my_afsub5",
+                    }
         400:
           $ref: '#/components/responses/BadRequest'
         503:
@@ -216,7 +235,7 @@ paths:
                     ]
                 lang:
                   type: string
-                  description: "Device locale Used for authentication and probabilistic modeling"
+                  description: "Device locale used for authentication and probabilistic modeling"
                   example: "en-US"
                 is_first:
                   type: boolean
@@ -268,9 +287,29 @@ paths:
                 $ref: '#/components/schemas/DLResponse'
               examples:
                 Click_not_found:
-                  $ref: '#/components/examples/ClickNotFound'
+                  value:
+                    found: false
+                    click_event: {}
                 Click_found:
-                  $ref: '#/components/examples/ClickFound'
+                  value:
+                    found: true
+                    click_event: {
+                      timestamp: "2020-04-22T08:45:33.412",
+                      custom_params: {
+                        fruit_name: "apples",
+                        fruit_amount: "26"
+                      },
+                      campaign_id: "394a89cf-275a-451b-b030-1c6f8b55ff19",
+                      match_type: "probabilistic",
+                      media_source: "Email",
+                      campaign: "my_new_campaign",
+                      click_http_referrer: "https://www.ynet.co.il/",
+                      af_sub1: "my_afsub1",
+                      af_sub2: "my_afsub2",
+                      af_sub3: "my_afsub3",
+                      af_sub4: "my_afsub4",
+                      af_sub5: "my_afsub5",
+                    }
         400:
           $ref: '#/components/responses/BadRequest'
         503:
